@@ -12,15 +12,27 @@ var io=socketIO(server);
 app.use(express.static(publicPath));
 
 io.on('connection',	(socket) =>{
-	console.log("User Connected");
-
+	console.log("User Connected"); 
 	socket.emit('newMessage',{
-		from: 'John',
-		text:'See you then',
-		createAt:123123
-	}); 
-socket.on('createMessage',(message)=>{
-		console.log('createMessage',message);	
+			from:'Admin',
+			text: 'Welcome to the group'
+		});
+		socket.broadcast.emit('newMessage',{
+			text:'New User Joined'
+		});
+	socket.on('createMessage',(message)=>{
+		//console.log('createMessage',message);
+		// io.emit('newMessage',{
+		// 	from: message.from,
+		// 	text: message.text,
+		// 	createdAt: new Date().getTime()
+		// });	
+
+		socket.broadcast.emit('newMessage',{
+			from: message.from,
+			text: message.text,
+			//createdAt: new Date.getTime()
+		});
 	});
 
 	socket.on('disconnect',()=>{
